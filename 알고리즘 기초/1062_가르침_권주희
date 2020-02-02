@@ -1,0 +1,65 @@
+#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+vector<char> vec;
+string arr[50];
+int n,k;
+bool character[26];
+bool isTeached[26];
+int maxi=0;
+void dfs(int x, int siz){
+    if(siz>k)
+        return;
+    else {
+        int cnt=0;
+        for(int i=0; i<n; i++) {
+            bool isReadable = true;
+            for(int j=3; j<arr[i].size()-4; j++) {
+                if(!isTeached[arr[i][j]-'a']) {
+                    isReadable=false;
+                    break;
+                }
+            }
+            if(isReadable)
+                cnt++;
+        }
+        maxi=max(maxi, cnt);
+        for(int i=x+1; i<vec.size(); i++) {
+            isTeached[vec[i]-'a']=true;
+            dfs(i, siz+1);
+            isTeached[vec[i]-'a']=false;
+        }
+    }
+}
+
+int main() {
+    cin>>n>>k;
+    k-=5;
+    for(int i=0; i<n; i++) {
+        cin>>arr[i];
+        for(int j=0; j<arr[i].size(); j++) {
+            character[arr[i][j]-97]=true;
+        }
+    }
+    for(int i=0; i<26; i++) {
+        if(character[i] && (i!='a' - 'a' && i!='c' - 'a' && i!='i' - 'a' && i!='n' - 'a' && i!='t' - 'a')) {
+            vec.push_back(i+97); //배워야 될 단어
+        }
+    }
+    isTeached['a' - 'a'] = true;
+    isTeached['c' - 'a'] = true;
+    isTeached['i' - 'a'] = true;
+    isTeached['n' - 'a'] = true;
+    isTeached['t' - 'a'] = true;
+    
+    if(vec.size()==0) {
+        cout<<n<<endl;
+    } else {
+        dfs(0,0);
+        isTeached[vec[0]-'a']=true;
+        dfs(0,1);
+        cout<<maxi<<endl;
+    }
+}
+
