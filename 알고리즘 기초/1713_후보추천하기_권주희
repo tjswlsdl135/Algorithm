@@ -1,0 +1,42 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+int n, per;
+int recommend[101];
+vector<int> res;
+int main() {
+    cin>>n>>per;
+    for(int i=0; i<per; i++) {
+        int a;
+        cin>>a;
+        pair<int, int> comp = {0,10000};
+        bool check=false;
+        for(int i=0; i<res.size(); i++) {
+            if(res[i]==a) {
+                recommend[a]++;
+                check=true;
+                break;
+            }
+            if(comp.second>recommend[res[i]]) {
+                comp.first = i;
+                comp.second = recommend[res[i]];
+            }
+        }
+        if(!check) {
+            if(res.size() >= n) {
+                recommend[res[comp.first]]=0;
+                res.erase(res.begin() + comp.first);
+            }
+            res.push_back(a);
+            recommend[a]++;
+        }
+    }
+    
+    sort(res.begin(), res.end());
+    for(int i=0; i<res.size(); i++) {
+        cout<<res[i]<<" ";
+    }
+    cout<<endl;
+    
+}
